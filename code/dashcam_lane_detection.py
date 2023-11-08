@@ -148,7 +148,7 @@ class Visualizer():
 
         self.fps = 25
         if self.save:
-            self.result = cv2.VideoWriter('lanes_video.mp4', cv2.VideoWriter_fourcc(
+            self.result = cv2.VideoWriter('output/lanes_detection_output.mp4', cv2.VideoWriter_fourcc(
                 *'mp4v'), self.fps, (self.capture_width, self.capture_height))
     
     @staticmethod
@@ -203,10 +203,12 @@ class Visualizer():
 
 def main():
     scale = 0.4 #scaling down all frames for faster processing 
-    frame = cv2.VideoCapture('data/whiteline.mp4')
+    video_path = 'data/whiteline.mp4'
+    save = True
+    frame = cv2.VideoCapture(video_path)
     _, sample_frame = frame.read()
     frames = ['Input', 'Edges', 'Lane Crop', 'Hough Lines', 'Lane Segmentation']
-    visuals = Visualizer(sample_frame, scale, frames)
+    visuals = Visualizer(sample_frame, scale, frames, save=save)
 
     while (frame.isOpened()):
         success, image = frame.read()
