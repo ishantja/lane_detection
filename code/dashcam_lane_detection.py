@@ -114,8 +114,6 @@ class LaneDetectorPipeline():
 
 # visualizer class is capable of productin 1-5 output windows scaled proportionally to the input sample image
 # it also has the capability to save the generated frames asa a video if used inside a loop
-
-
 class Visualizer():
     def __init__(self, image, scale, frames=[None, None, None, None, 'Final Frame'], save=False):
         self.frame1 = None
