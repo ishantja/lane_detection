@@ -1,9 +1,11 @@
 # Lane Detection and Segmentation 
 This Python program detects straight lanes in a video, classifies them into left and right lanes, and finally colors them according to the type of lane (dashed=red or solid=green). It uses computer vision techniques and the OpenCV library for processing and analyzing video frames. The program provides visual feedback in real-time, with up to five frames displayed side by side, including the input frame, edges, cropped lane region, Hough lines, and the final lane segmentation with classification colors.
 
-![alt text][logo]
-
 [logo]: output/lane_detection_gif.gif "Lane Detection Gif"
+
+<p align="center">
+  <img src=[logo] alt="animated" />
+</p>
 
 ## Hough Transform
 The Hough Line Transform is an image processing technique used to detect straight lines in an image. It works by transforming the image from (x, y) coordinates to (ρ, θ) space, where ρ is the distance from the origin to a point on the line, and θ is the angle between the line and the x-axis.
