@@ -2,7 +2,7 @@
 This Python program detects straight lanes in a video, classifies them into left and right lanes, and finally colors them according to the type of lane (dashed=red or solid=green). It uses computer vision techniques and the OpenCV library for processing and analyzing video frames. The program provides visual feedback in real-time, with up to five frames displayed side by side, including the input frame, edges, cropped lane region, Hough lines, and the final lane segmentation with classification colors.
 
 <p align="center">
-  <img src=output/lane_detection_gif.gif alt="animated" />
+  <img src= output/lane_detection_gif.gif alt="animated" />
 </p>
 
 ## Hough Transform
