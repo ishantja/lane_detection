@@ -3,7 +3,7 @@
 
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
+import os
 
 
 class LaneDetectorPipeline():
@@ -114,6 +114,8 @@ class LaneDetectorPipeline():
 
 # visualizer class is capable of productin 1-5 output windows scaled proportionally to the input sample image
 # it also has the capability to save the generated frames asa a video if used inside a loop
+
+
 class Visualizer():
     def __init__(self, image, scale, frames=[None, None, None, None, 'Final Frame'], save=False):
         self.frame1 = None
@@ -135,11 +137,14 @@ class Visualizer():
         self.number_of_small_frames = self.number_of_frames - 1
         self.aspect_ratio = self.frame_width/self.frame_height
 
-        self.small_frame_width = int(self.frame_width/self.number_of_small_frames)
-        self.small_frame_height = int((self.number_of_small_frames * self.small_frame_width)/self.aspect_ratio)
+        self.small_frame_width = int(
+            self.frame_width/self.number_of_small_frames)
+        self.small_frame_height = int(
+            (self.number_of_small_frames * self.small_frame_width)/self.aspect_ratio)
 
         self.capture_width = self.frame_width * self.number_of_small_frames
-        self.capture_height = self.frame_height * self.number_of_small_frames + self.frame_height
+        self.capture_height = self.frame_height * \
+            self.number_of_small_frames + self.frame_height
 
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         self.fontScale = 1
@@ -148,10 +153,18 @@ class Visualizer():
 
         self.fps = 25
         if self.save:
-            self.result = cv2.VideoWriter('output/lanes_detection_output.mp4', cv2.VideoWriter_fourcc(
+            save_path = Visualizer.get_absolute_path(
+                "output") + "/lane_detection_output.mp4"
+            self.result = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(
                 *'mp4v'), self.fps, (self.capture_width, self.capture_height))
-    
+
     @staticmethod
+    def get_absolute_path(dir):
+        current_directory = os.getcwd()
+        parent_directory = os.path.dirname(current_directory)
+        absolute_path = os.path.join(parent_directory, dir)
+        return absolute_path
+
     def resize(self, image, scale):
         new_width = int(image.shape[1] * scale)
         new_height = int(image.shape[0] * scale)
@@ -172,13 +185,15 @@ class Visualizer():
                 self.frame_dict[frame_name], frame_name, org2, self.font, self.fontScale, self.color, self.thickness, cv2.LINE_AA)
 
     def update_final_frame(self, image, frame_name):
-        image = cv2.resize(image, (self.frame_width * self.number_of_small_frames, self.frame_height * self.number_of_small_frames))
+        image = cv2.resize(image, (self.frame_width * self.number_of_small_frames,
+                           self.frame_height * self.number_of_small_frames))
 
         self.frame_dict[frame_name] = image
 
         vertical_placement = 0.95
         horizontal_placement = 0.95
-        org1 = (int(self.frame_width-vertical_placement*self.frame_width), int(self.capture_height-horizontal_placement* self.capture_height))
+        org1 = (int(self.frame_width-vertical_placement*self.frame_width),
+                int(self.capture_height-horizontal_placement * self.capture_height))
         self.frame_dict[frame_name] = cv2.putText(
             self.frame_dict[frame_name], frame_name, org1, self.font, self.fontScale, self.color, self.thickness, cv2.LINE_AA)
 
@@ -201,14 +216,18 @@ class Visualizer():
     def __del__(self):
         print("Closing output feed...")
 
+
 def main():
-    scale = 0.4 #scaling down all frames for faster processing 
-    video_path = 'data/whiteline.mp4'
+    scale = 0.4  # scaling down all frames for faster processing
+    video_path = Visualizer.get_absolute_path("data") + "/whiteline.mp4"
+    print(video_path)
     save = True
     frame = cv2.VideoCapture(video_path)
     _, sample_frame = frame.read()
-    frames = ['Input', 'Edges', 'Lane Crop', 'Hough Lines', 'Lane Segmentation']
-    visuals = Visualizer(sample_frame, scale, frames, save=save)
+    frames = ['Input', 'Edges', 'Lane Crop',
+              'Hough Lines', 'Lane Segmentation']
+    visuals = Visualizer(image=sample_frame, scale=scale,
+                         frames=frames, save=save)
 
     while (frame.isOpened()):
         success, image = frame.read()
